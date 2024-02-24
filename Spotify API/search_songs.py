@@ -1,11 +1,11 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 import auth_manager
-SPOTIPY_CLIENT_ID = "82161998342f4d75adf9faea56dee308"
-SPOTIPY_CLIENT_SECRET = "a56dd02efa5c4c9eb05645d0f708650d"
-scope = auth_manager.credentials
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,client_secret=SPOTIPY_CLIENT_SECRET,redirect_uri="http://example.com"))
-results = sp.current_user_saved_tracks()
-for idx, item in enumerate(results['items']):
-    track = item['track']
-    print(idx, track['artists'][0]['name'], " – ", track['name'])
+name = "yes or no" 
+result = auth_manager.sp.search(name)
+track_id="https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV" 
+track=auth_manager.sp.track(track_id, market=None)
+print(track)
+import json
+with open('data.json', 'w') as f:
+    json.dump(track, f)
+# result['tracks']['items'][0]['artists']
+# print(result)56
