@@ -1,5 +1,4 @@
 <script>
-	import Form from '../../../components/Form.svelte';
 	import Music from '../../../components/icons/Music.svelte';
 	import Chart from '../../../components/icons/Chart.svelte';
 	import History from '../../../components/History.svelte';
@@ -9,7 +8,7 @@
 <header>
 	<div class="navbar bg-base-300">
 		<div class="flex-1">
-			<a href="/" class="btn btn-ghost text-xl">hello</a>
+			<a href="/" class="btn btn-ghost text-xl">chordsource</a>
 		</div>
 		<div class="flex-none">
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
