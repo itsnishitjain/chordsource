@@ -3,14 +3,10 @@ name = "yes or no"
 result = auth_manager.sp.search(name)
 track_id="https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV" 
 track=auth_manager.sp.track(track_id, market=None)
-print(track)
-import json
-with open('song_data.json', 'w') as f:
-    json.dump(track, f)
-# song = 
-# album/images[2]/url
-# artists[0]/name
-# external_urls/spotify
-# id
-# result['tracks']['items'][0]['artists']
-# print(result)56
+#print(track)
+image_url = track['album']['images'][2]['url']
+artist_name = track['artists'][0]['name']
+track_url = track['external_urls']['spotify']
+track_id = track['id']
+song_data=[image_url,artist_name,track_url,track_id]
+print(song_data)
