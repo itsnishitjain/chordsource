@@ -7,7 +7,7 @@
 </script>
 
 <form
-	class="fixed bottom-0 left-0 right-0 p-4 flex justify-center align-middle bg-slate-500"
+	class="fixed bottom-0 left-0 right-0 p-4 max-h-16 flex justify-center align-middle bg-slate-500"
 	on:submit={(e) => addSong(e)}
 >
 	<label>

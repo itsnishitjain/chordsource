@@ -2,12 +2,18 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p> -->
 
 <script>
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
 	const backgroundGradient = () => {
-		var gradient = new Gradient();
+		let gradient = new Gradient();
 		gradient.initGradient('#canvas');
 	};
 
-	import { goto } from '$app/navigation';
+	onMount(() => {
+		backgroundGradient();
+	});
+
 	let uid = '';
 
 	const goToList = (e) => {
@@ -20,11 +26,7 @@
 </script>
 
 <svelte:head>
-	<script
-		async
-		src="https://cdn.jsdelivr.net/gh/greentfrapp/pocoloco@minigl/minigl.js"
-		on:load={() => backgroundGradient()}
-	></script>
+	<script async src="https://cdn.jsdelivr.net/gh/greentfrapp/pocoloco@minigl/minigl.js"></script>
 </svelte:head>
 
 <slot />

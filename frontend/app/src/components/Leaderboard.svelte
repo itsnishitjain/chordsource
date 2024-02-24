@@ -1,11 +1,13 @@
 <script>
-	import VotableSong from './VotableSong.svelte';
+	import Song from './Song.svelte';
 
-	import songData from '$lib/dummyData';
+	import dummyData from '$lib/dummyData';
+
+	let songData = dummyData.slice(4);
 </script>
 
-<div>
+<div class="mb-16">
 	{#each songData as song}
-		<VotableSong songData={song} />
+		<Song songData={song} votable={true} />
 	{/each}
 </div>
