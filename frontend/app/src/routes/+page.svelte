@@ -42,7 +42,7 @@
 				type="text"
 				bind:value={uid}
 				placeholder="Enter code"
-				class="input w-full max-w-xs rounded-md p-3"
+				class="input input-bordered w-full max-w-xs rounded-md p-3"
 			/>
 		</form>
 	</div>
