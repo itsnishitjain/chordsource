@@ -19,4 +19,4 @@ res = sp.devices()
 pprint(res)
 
 # Change track
-sp.add_to_queue('spotify:track:1HfMVBKM75vxSfsQ5VefZ5',device_id="d41995d80c2c373217e9f2db0e85b4b7cec13d46")
+sp.add_to_queue('spotify:track:1HfMVBKM75vxSfsQ5VefZ5',device_id=None)
