@@ -1,6 +1,5 @@
 <script>
 	import Form from '../../components/Form.svelte';
-	import Music from '../../components/icons/Music.svelte';
 	import Chart from '../../components/icons/Chart.svelte';
 	import Leaderboard from '../../components/Leaderboard.svelte';
 	import NowPlaying from '../../components/NowPlaying.svelte';
@@ -18,11 +17,6 @@
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
 				<div class="indicator">
 					<a href={'/' + data.slug + '/analytics'}><Chart /></a>
-				</div>
-			</div>
-			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-				<div>
-					<Music />
 				</div>
 			</div>
 		</div>

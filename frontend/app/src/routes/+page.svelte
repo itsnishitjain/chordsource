@@ -19,7 +19,7 @@
 	<div class="hero h-full">
 		<div class="hero-content flex flex-col justify-center items-center">
 			<h1 class="max-w-md text-center text-5xl font-bold p-4 text-black">chordsource</h1>
-			<div class="bg-white w-full h-1/4 p-4 bg-opacity-35 rounded-md mb-8">
+			<div class="bg-white w-full max-w-md h-1/4 p-4 bg-opacity-35 rounded-md mb-8">
 				<p class="py-6 text-black text-center">
 					Enhance your venue's vibe with chordsource, the ultimate communal music playlist that
 					unites the crowd through shared tunes, creating a dynamic and diverse musical atmosphere.
