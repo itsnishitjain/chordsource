@@ -5,6 +5,8 @@
 	import Leaderboard from '../../components/Leaderboard.svelte';
 	import NowPlaying from '../../components/NowPlaying.svelte';
 	import Queue from '../../components/Queue.svelte';
+
+	export let data;
 </script>
 
 <header>
@@ -15,7 +17,7 @@
 		<div class="flex-none">
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
 				<div class="indicator">
-					<Chart />
+					<a href={'/' + data.slug + '/analytics'}><Chart /></a>
 				</div>
 			</div>
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -30,7 +32,7 @@
 <!-- now playing -->
 <section class="p-2 mb-4 pt-8">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6 text-white">Now playing</h1>
+		<h1 class="font-bold text-xl pb-6 text-base-300">Now playing</h1>
 		<NowPlaying />
 	</div>
 </section>
@@ -38,7 +40,7 @@
 <!-- up next -->
 <section class="p-2 mb-4">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6 text-white">Up next</h1>
+		<h1 class="font-bold text-xl pb-6 text-base-300">Up next</h1>
 		<Queue />
 	</div>
 </section>
@@ -46,7 +48,7 @@
 <!-- leaderboard -->
 <section class="p-2 mb-4">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6 text-white">Leaderboard</h1>
+		<h1 class="font-bold text-xl pb-6 text-base-300">Leaderboard</h1>
 		<Leaderboard />
 	</div>
 </section>
