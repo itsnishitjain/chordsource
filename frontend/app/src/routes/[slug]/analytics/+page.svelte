@@ -1,8 +1,9 @@
 <script>
 	import Music from '../../../components/icons/Music.svelte';
-	import Chart from '../../../components/icons/Chart.svelte';
 	import History from '../../../components/History.svelte';
 	import Pie from '../../../components/Pie.svelte';
+
+	export let data;
 </script>
 
 <header>
@@ -11,14 +12,9 @@
 			<a href="/" class="btn btn-ghost text-xl">chordsource</a>
 		</div>
 		<div class="flex-none">
-			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-				<div class="indicator">
-					<Chart />
-				</div>
-			</div>
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
 				<div>
-					<a href="/[slug]"><Music /></a>
+					<a href={'/' + data.slug}><Music /></a>
 				</div>
 			</div>
 		</div>
