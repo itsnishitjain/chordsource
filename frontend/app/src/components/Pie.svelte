@@ -19,6 +19,6 @@
 	});
 </script>
 
-<div>
+<div class="bg-white bg-opacity-50 p-4 rounded-md">
 	<canvas id="genre-chart"></canvas>
 </div>
