@@ -35,16 +35,16 @@
 	<canvas id="canvas" />
 </div>
 
-<div class="hero min-h-screen bg-base-200">
-	<div class="hero-content flex h-screen justify-center items-center">
-		<h1 class="max-w-md text-center text-5xl font-bold p-8 text-white">Group 10</h1>
+<div class="hero min-h-screen">
+	<div class="hero-content flex flex-col h-screen justify-center items-center">
+		<h1 class="max-w-md text-center text-5xl font-bold p-8 text-black">Group 10</h1>
 		<form class="max-w-md text-center" on:submit={(e) => goToList(e)}>
 			<input
 				id="inputbox"
 				type="text"
 				bind:value={uid}
 				placeholder="Enter code"
-				class="input input-bordered w-full max-w-xs rounded-md p-3"
+				class="input w-full max-w-xs rounded-md p-3"
 			/>
 		</form>
 	</div>
@@ -72,5 +72,6 @@
 		--gradient-color-3: #7038ff;
 		--gradient-color-4: #ffba27;
 		--gradient-speed: 0.000006;
+		opacity: 0.5;
 	}
 </style>
