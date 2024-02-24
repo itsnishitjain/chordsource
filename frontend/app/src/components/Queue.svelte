@@ -5,8 +5,10 @@
 	let songsinQueue = dummyData.slice(1, 4);
 </script>
 
-<div>
-	{#each songsinQueue as song}
-		<Song songData={song} votable={false} />
-	{/each}
+<div class="max-w-md ml-auto mr-auto">
+	<div>
+		{#each songsinQueue as song}
+			<Song songData={song} votable={false} />
+		{/each}
+	</div>
 </div>
