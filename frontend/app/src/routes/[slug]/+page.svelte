@@ -1,5 +1,7 @@
-<script src="https://kit.fontawesome.com/41288383b3.js" crossorigin="anonymous">
+<script>
 	import Form from '../../components/Form.svelte';
+	import Music from '../../components/icons/Music.svelte';
+	import Chart from '../../components/icons/Chart.svelte';
 	import Leaderboard from '../../components/Leaderboard.svelte';
 	import NowPlaying from '../../components/NowPlaying.svelte';
 	import Queue from '../../components/Queue.svelte';
@@ -8,17 +10,17 @@
 <header>
 	<div class="navbar bg-base-300">
 		<div class="flex-1">
-			<a href="/" class="btn btn-ghost text-xl">Group10</a>
+			<a href="/" class="btn btn-ghost text-xl">chordsource</a>
 		</div>
 		<div class="flex-none">
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
 				<div class="indicator">
-					<i class="fa-solid fa-chart-simple"></i>
+					<Chart />
 				</div>
 			</div>
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
 				<div>
-					<i class="fa-solid fa-music"></i>
+					<Music />
 				</div>
 			</div>
 		</div>
