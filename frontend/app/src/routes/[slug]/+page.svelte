@@ -8,7 +8,7 @@
 <header>
 	<div class="navbar bg-base-300">
 		<div class="flex-1">
-			<a class="btn btn-ghost text-xl">Group10</a>
+			<a href="/" class="btn btn-ghost text-xl">Group10</a>
 		</div>
 		<div class="flex-none">
 			<div class="dropdown dropdown-end">
@@ -54,10 +54,14 @@
 	</div>
 </header>
 
+<body class="bg-gradient-to-b from-pink-300 to-cyan-500">
+	<div class="bg-gradient-to-t from-cyan-500 to-blue-500"></div>
+</body>
+
 <!-- now playing -->
 <section class="p-2 mb-4 pt-8">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6">Now playing</h1>
+		<h1 class="font-bold text-xl pb-6 text-white">Now playing</h1>
 		<NowPlaying />
 	</div>
 </section>
@@ -65,7 +69,7 @@
 <!-- up next -->
 <section class="p-2 mb-4">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6">Up next</h1>
+		<h1 class="font-bold text-xl pb-6 text-white">Up next</h1>
 		<Queue />
 	</div>
 </section>
@@ -73,7 +77,7 @@
 <!-- leaderboard -->
 <section class="p-2 mb-4">
 	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6">Leaderboard</h1>
+		<h1 class="font-bold text-xl pb-6 text-white">Leaderboard</h1>
 		<Leaderboard />
 	</div>
 </section>
@@ -82,3 +86,15 @@
 <section>
 	<Form />
 </section>
+
+<!-- <style>
+	.gradient {
+		background: rgb(238, 174, 202);
+		background: linear-gradient(
+			180deg,
+			rgba(238, 174, 202, 1) 0%,
+			rgba(148, 187, 233, 1) 52%,
+			rgba(148, 187, 233, 0) 100%
+		);
+	}
+</style> -->

@@ -5,7 +5,7 @@
 	export let songData, votable;
 </script>
 
-<div class="flex p-2 justify-between border border-slate-700">
+<div class="flex p-2 justify-between border border-slate-700 bg-slate-800 rounded-md mt-2">
 	<div class="flex flex-col">
 		<span class="font-bold"
 			><a rel="noopener noreferrer" href={songData.url}>{songData.title}</a></span
