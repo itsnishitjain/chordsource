@@ -8,5 +8,6 @@ image_url = track['album']['images'][2]['url']
 artist_name = track['artists'][0]['name']
 track_url = track['external_urls']['spotify']
 track_id = track['id']
-song_data=[image_url,artist_name,track_url,track_id]
+track_uri = track['uri']
+song_data=[image_url,artist_name,track_url,track_id,track_uri]
 print(song_data)
