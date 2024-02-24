@@ -2,4 +2,8 @@
 	import '../app.css';
 </script>
 
-<slot />
+
+<div class="max-w-md ml-auto mr-auto">
+	<slot />
+</div>
+
