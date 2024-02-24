@@ -13,7 +13,7 @@
 		<span class="italic">by {songData.artist}</span>
 	</div>
 	{#if votable}
-		<div class="flex align-middle gap-4">
+		<div class="flex align-middle gap-4 pt-3">
 			<span class="">{songData.score}</span>
 			<div>
 				<button><Upvote /></button>
