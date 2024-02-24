@@ -27,10 +27,6 @@
 	</div>
 </header>
 
-<body class="bg-gradient-to-b from-pink-300 to-cyan-500">
-	<div class="bg-gradient-to-t from-cyan-500 to-blue-500"></div>
-</body>
-
 <!-- now playing -->
 <section class="p-2 mb-4 pt-8">
 	<div class="max-w-md ml-auto mr-auto">
