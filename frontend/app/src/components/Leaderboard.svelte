@@ -1,9 +1,7 @@
 <script>
 	import Song from './Song.svelte';
 
-	import dummyData from '$lib/dummyData';
-
-	let songData = dummyData.slice(4);
+	export let songData;
 </script>
 
 <div class="max-w-md ml-auto mr-auto">

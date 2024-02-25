@@ -3,9 +3,32 @@
 	import Chart from '../../components/icons/Chart.svelte';
 	import Leaderboard from '../../components/Leaderboard.svelte';
 	import NowPlaying from '../../components/NowPlaying.svelte';
-	import Queue from '../../components/Queue.svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
+
+	let queue = data.res.queue;
+	queue.sort((a, b) => b.score - a.score);
+
+	let nowPlaying = data.res.history.sort((a, b) => b.timestamp - a.timestamp)[0];
+
+	onMount(() => {
+		setInterval(async () => {
+			let res = await fetch('http://0.0.0.0:8080/status', {
+				method: 'GET'
+			});
+
+			res = await res.json();
+			let resQueue = res.queue;
+			let resHist = await res.history;
+
+			queue = resQueue.sort((a, b) => {
+				b.score - a.score;
+			});
+
+			nowPlaying = resHist.sort((a, b) => b.timestamp - a.timestamp)[0];
+		}, 15000);
+	});
 </script>
 
 <header>
@@ -27,15 +50,7 @@
 <section class="p-2 mb-4 pt-8">
 	<div class="max-w-md ml-auto mr-auto">
 		<h1 class="font-bold text-xl pb-6 text-base-300">Now playing</h1>
-		<NowPlaying />
-	</div>
-</section>
-
-<!-- up next -->
-<section class="p-2 mb-4">
-	<div class="max-w-md ml-auto mr-auto">
-		<h1 class="font-bold text-xl pb-6 text-base-300">Up next</h1>
-		<Queue />
+		<NowPlaying songData={nowPlaying} />
 	</div>
 </section>
 
@@ -43,7 +58,7 @@
 <section class="p-2 mb-4">
 	<div class="max-w-md ml-auto mr-auto">
 		<h1 class="font-bold text-xl pb-6 text-base-300">Leaderboard</h1>
-		<Leaderboard />
+		<Leaderboard songData={queue} />
 	</div>
 </section>
 
