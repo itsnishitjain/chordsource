@@ -40,7 +40,7 @@ class Genres(db.Model):
 
 class Features(db.Model):
     feature = db.Column(db.Text, nullable=False, primary_key=True)
-    weight = db.Column(db.Float, nullable=False)
+    value = db.Column(db.Float, nullable=False)
 
 
 class SpotifySong(db.Model):
@@ -85,7 +85,7 @@ class SpotifySong(db.Model):
         return song
 
     def get_info(url):
-        song = SpotifySong.get(entry.song_url)
+        song = SpotifySong.get(url)
         return {
             'url': song.url,
             'name': song.name,
@@ -111,6 +111,9 @@ def get_status():
     return {
         'genres': {
             entry.genre: entry.count for entry in Genres.query.all()
+        },
+        'features': {
+            entry.feature: entry.value for entry in Features.query.all()
         },
         'queue': [
             {
@@ -144,7 +147,9 @@ def post_vote():
     if song_url is None or song_url == '':
         app.logger.warning('Missing song URL')
         return {'err': 'Missing song URL'}, 400
-    # TODO(now): sanitise song_url
+    if not song_url.startswith('https://open.spotify.com/track/'):
+        app.logger.warning('Invalid song URL')
+        return {'err': 'Invalid song URL'}, 400
 
     now = datetime.utcnow().timestamp()
     entry = Queue.query.filter_by(song_url=song_url).first()
@@ -218,15 +223,35 @@ with app.app_context():
             db.session.commit()
 
             # Figure out current vibe from recent history of features and genres
-            # TODO: server side feature accumulation?
             genres = {}
+            total_acousticness = 0
+            total_danceability = 0
+            total_energy = 0
+            total_liveness = 0
+            total_tempo = 0
+            total_valence = 0
+            count = 0
             for entry in History.query.filter(History.timestamp > now - 1800).all():
                 song = SpotifySong.get(entry.song_url)
                 for genre in song.genres.split('\t'):
                     genres[genre] = genres[genre] + 1 if genre in genres else 1
+                total_acousticness += song.acousticness
+                total_danceability += song.danceability
+                total_energy += song.energy
+                total_liveness += song.liveness
+                total_tempo += song.tempo
+                total_valence += song.valence
+                count += 1
             Genres.query.delete()
             for genre, count in genres.items():
                 db.session.add(Genres(genre=genre, count=count))
+            Features.query.delete()
+            db.session.add(Features(feature='acousticness', value=total_acousticness/count if count else 0))
+            db.session.add(Features(feature='danceability', value=total_danceability/count if count else 0))
+            db.session.add(Features(feature='energy', value=total_energy/count if count else 0))
+            db.session.add(Features(feature='liveness', value=total_liveness/count if count else 0))
+            db.session.add(Features(feature='tempo', value=total_tempo/count if count else 0))
+            db.session.add(Features(feature='valence', value=total_valence/count if count else 0))
             db.session.commit()
 
             # Ensure enough songs are in queue
