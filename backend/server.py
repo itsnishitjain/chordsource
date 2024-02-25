@@ -143,13 +143,10 @@ def get_analytics():
 def post_vote():
     app.logger.info('/vote request')
 
-    song_url = request.args.get('url')
+    song_url = "https://open.spotify.com/track/" + request.args.get('url')
     if song_url is None or song_url == '':
         app.logger.warning('Missing song URL')
         return {'err': 'Missing song URL'}, 400
-    if not song_url.startswith('https://open.spotify.com/track/'):
-        app.logger.warning('Invalid song URL')
-        return {'err': 'Invalid song URL'}, 400
 
     now = datetime.utcnow().timestamp()
     entry = Queue.query.filter_by(song_url=song_url).first()
@@ -210,7 +207,11 @@ with app.app_context():
                 entry = Queue.query.order_by(Queue.score.desc()).first()
                 song = SpotifySong.get(entry.song_url)
                 sp.start_playback(uris=[entry.song_url])
-                db.session.add(History(song_url=entry.song_url, timestamp=now))
+                hist_entry = History.query.filter_by(song_url=entry.song_url).first()
+                if hist_entry is None:
+                    db.session.add(History(song_url=entry.song_url, timestamp=now))
+                else:
+                    hist_entry.timestamp = now
                 db.session.delete(entry)
                 db.session.commit()
                 delay = song.duration_ms / 1000
@@ -246,12 +247,18 @@ with app.app_context():
             for genre, count in genres.items():
                 db.session.add(Genres(genre=genre, count=count))
             Features.query.delete()
-            db.session.add(Features(feature='acousticness', value=total_acousticness/count if count else 0))
-            db.session.add(Features(feature='danceability', value=total_danceability/count if count else 0))
-            db.session.add(Features(feature='energy', value=total_energy/count if count else 0))
-            db.session.add(Features(feature='liveness', value=total_liveness/count if count else 0))
-            db.session.add(Features(feature='tempo', value=total_tempo/count if count else 0))
-            db.session.add(Features(feature='valence', value=total_valence/count if count else 0))
+            average_acousticness = total_acousticness/count if count else 0
+            average_danceability = total_danceability/count if count else 0
+            average_energy = total_energy/count if count else 0
+            average_liveness = total_liveness/count if count else 0
+            average_tempo = total_tempo/count if count else 0
+            average_valence = total_valence/count if count else 0
+            db.session.add(Features(feature='acousticness', value=average_acousticness))
+            db.session.add(Features(feature='danceability', value=average_danceability))
+            db.session.add(Features(feature='energy', value=average_energy))
+            db.session.add(Features(feature='liveness', value=average_liveness))
+            db.session.add(Features(feature='tempo', value=average_tempo))
+            db.session.add(Features(feature='valence', value=average_valence))
             db.session.commit()
 
             # Ensure enough songs are in queue
@@ -282,16 +289,19 @@ with app.app_context():
                     app.logger.warning('Failed to find a single new recommendation not already selected!')
 
             # Update queue scores based on new vibe and decay
-            # TODO: include features in scoring?
             for entry in Queue.query.all():
                 song = SpotifySong.get(entry.song_url)
                 entry.multiplier = 1 + sum([genres[genre] for genre in song.genres.split('\t') if genre in genres])
+                entry.multiplier += min(1, max(0, 1 - abs(average_acousticness - song.acousticness)))
+                entry.multiplier += min(1, max(0, 1 - abs(average_danceability - song.danceability)))
+                entry.multiplier += min(1, max(0, 1 - abs(average_energy - song.energy)))
+                entry.multiplier += min(1, max(0, 1 - abs(average_valence - song.valence)))
                 entry.score = (entry.rawscore - (now - entry.timestamp) / 600) * entry.multiplier
             db.session.commit()
 
         except TimeoutError:
             delay = 15
 
-        delay = min(30, delay + 0.25)
+        delay = min(15, delay + 0.25)
         app.logger.info(f'RESTing for {delay}s...')
         time.sleep(delay)
