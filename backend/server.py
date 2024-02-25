@@ -1,5 +1,6 @@
 from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
 from spotipy import SpotifyOAuth, Spotify
 from datetime import datetime
 import waitress
@@ -11,6 +12,8 @@ import time
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'todo'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 db = SQLAlchemy(app)
 sp = Spotify(auth_manager=SpotifyOAuth(
     client_id='82161998342f4d75adf9faea56dee308',
@@ -106,6 +109,7 @@ class SpotifySong(db.Model):
 
 
 @app.route('/status', methods=['GET'])
+@cross_origin()
 def get_status():
     app.logger.info('/status request')
     return {
@@ -133,13 +137,8 @@ def get_status():
     }
 
 
-@app.route('/analytics', methods=['GET'])
-def get_analytics():
-    app.logger.info('/analytics request')
-    return {'TODO': 'no idea what to put here yet'}
-
-
 @app.route('/vote', methods=['POST'])
+@cross_origin()
 def post_vote():
     app.logger.info('/vote request')
 
