@@ -261,31 +261,31 @@ with app.app_context():
             db.session.commit()
 
             # Ensure enough songs are in queue
-            while len(Queue.query.all()) < 3:
-                app.logger.info('Generating a suggestion for the queue...')
+            if len(Queue.query.all()) < 3:
+                app.logger.info('Generating suggestions for the queue...')
                 bad_song_urls = [entry.song_url for entry in Queue.query.all() + History.query.filter(History.timestamp > now - 1800).all()]
-
                 seed_tracks = [entry.song_url for entry in History.query.order_by(History.timestamp.desc()).limit(5).all()]
                 if len(seed_tracks) == 0:
                     seed_tracks.append('https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV')
-                # TODO(now): blocking forever for me
-                # song_urls = [track['external_urls']['spotify'] for track in sp.recommendations(seed_tracks=seed_tracks, limit=10)['tracks']]
-                song_urls = [
-                    'https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV',
-                    'https://open.spotify.com/track/6yzHKyNLHZQDZzTuQrRF0G',
-                    'https://open.spotify.com/track/5ONOlTiqymhzwcFjqcIT6E',
-                    'https://open.spotify.com/track/5PyDJG7SQRgWXefgexqIge',
-                    'https://open.spotify.com/track/7ArVzlFsFsQXNseVXmdOyk',
-                    'https://open.spotify.com/track/0bYVPJvXr8ACmw313cVvhB',
-                ]
+                song_urls = [track['external_urls']['spotify'] for track in sp.recommendations(seed_tracks=seed_tracks)['tracks']]
+                # song_urls = [
+                #     'https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV',
+                #     'https://open.spotify.com/track/6yzHKyNLHZQDZzTuQrRF0G',
+                #     'https://open.spotify.com/track/5ONOlTiqymhzwcFjqcIT6E',
+                #     'https://open.spotify.com/track/5PyDJG7SQRgWXefgexqIge',
+                #     'https://open.spotify.com/track/7ArVzlFsFsQXNseVXmdOyk',
+                #     'https://open.spotify.com/track/0bYVPJvXr8ACmw313cVvhB',
+                # ]
                 random.shuffle(song_urls)
-                for song_url in song_urls:
-                    if song_url not in bad_song_urls:
-                        db.session.add(Queue(song_url=song_url, score=1, rawscore=random.uniform(0.5, 1), multiplier=1, timestamp=now))
-                        db.session.commit()
-                        break
-                else:
-                    app.logger.warning('Failed to find a single new recommendation not already selected!')
+                for _ in range(3 - len(Queue.query.all())):
+                    for song_url in song_urls:
+                        if song_url not in bad_song_urls:
+                            bad_song_urls.append(song_url)
+                            db.session.add(Queue(song_url=song_url, score=1, rawscore=random.uniform(0.5, 1), multiplier=1, timestamp=now))
+                            db.session.commit()
+                            break
+                    else:
+                        app.logger.warning('Failed to find a single new recommendation not already selected!')
 
             # Update queue scores based on new vibe and decay
             for entry in Queue.query.all():
