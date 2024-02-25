@@ -116,28 +116,32 @@ class SpotifySong(db.Model):
 @cross_origin()
 def get_status():
     app.logger.info('/status request')
+
+    queue = [
+        {
+            'song': SpotifySong.get_info(entry.song_url),
+            'score': entry.score,
+            'rawscore': entry.rawscore,
+            'multiplier': entry.multiplier,
+            'timestamp': entry.timestamp,
+        } for entry in Queue.query.all()
+    ]
+
+    history = [
+        {
+            'song': SpotifySong.get_info(entry.song_url),
+            'timestamp': entry.timestamp,
+        } for entry in History.query.all()
+    ]
+
+    queue.sort(key=lambda x: x['score'])
+    history.sort(key=lambda x: x['timestamp'])
+
     return {
-        'genres': {
-            entry.genre: entry.count for entry in Genres.query.all()
-        },
-        'features': {
-            entry.feature: entry.value for entry in Features.query.all()
-        },
-        'queue': [
-            {
-                'song': SpotifySong.get_info(entry.song_url),
-                'score': entry.score,
-                'rawscore': entry.rawscore,
-                'multiplier': entry.multiplier,
-                'timestamp': entry.timestamp,
-            } for entry in Queue.query.all()
-        ],
-        'history': [
-            {
-                'song': SpotifySong.get_info(entry.song_url),
-                'timestamp': entry.timestamp,
-            } for entry in History.query.all()
-        ]
+        'genres': {entry.genre: entry.count for entry in Genres.query.all()},
+        'features': {entry.feature: entry.value for entry in Features.query.all()},
+        'queue': queue,
+        'history': history,
     }
 
 
@@ -271,15 +275,15 @@ with app.app_context():
                 seed_tracks = [entry.song_url for entry in History.query.order_by(History.timestamp.desc()).limit(5).all()]
                 if len(seed_tracks) == 0:
                     seed_tracks.append('https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV')
-                song_urls = [track['external_urls']['spotify'] for track in sp.recommendations(seed_tracks=seed_tracks)['tracks']]
-                # song_urls = [
-                #     'https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV',
-                #     'https://open.spotify.com/track/6yzHKyNLHZQDZzTuQrRF0G',
-                #     'https://open.spotify.com/track/5ONOlTiqymhzwcFjqcIT6E',
-                #     'https://open.spotify.com/track/5PyDJG7SQRgWXefgexqIge',
-                #     'https://open.spotify.com/track/7ArVzlFsFsQXNseVXmdOyk',
-                #     'https://open.spotify.com/track/0bYVPJvXr8ACmw313cVvhB',
-                # ]
+                # song_urls = [track['external_urls']['spotify'] for track in sp.recommendations(seed_tracks=seed_tracks)['tracks']]
+                song_urls = [
+                    'https://open.spotify.com/track/2gkVEnpahpE3bQuvGuCpAV',
+                    'https://open.spotify.com/track/6yzHKyNLHZQDZzTuQrRF0G',
+                    'https://open.spotify.com/track/5ONOlTiqymhzwcFjqcIT6E',
+                    'https://open.spotify.com/track/5PyDJG7SQRgWXefgexqIge',
+                    'https://open.spotify.com/track/7ArVzlFsFsQXNseVXmdOyk',
+                    'https://open.spotify.com/track/0bYVPJvXr8ACmw313cVvhB',
+                ]
                 random.shuffle(song_urls)
                 for _ in range(3 - len(Queue.query.all())):
                     for song_url in song_urls:
