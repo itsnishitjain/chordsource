@@ -8,6 +8,8 @@ import threading
 import logging
 import random
 import time
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'todo'
@@ -15,9 +17,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
 db = SQLAlchemy(app)
+
+load_dotenv()
 sp = Spotify(auth_manager=SpotifyOAuth(
-    client_id='82161998342f4d75adf9faea56dee308',
-    client_secret='a56dd02efa5c4c9eb05645d0f708650d',
+    client_id=os.environ.get("SPOTIFY_CLIENT_ID"),
+    client_secret=os.environ.get("SPOTIFY_CLIENT_SECRET"),
     redirect_uri='http://localhost:7777/callback',
     scope='user-read-playback-state,user-modify-playback-state'
 ))

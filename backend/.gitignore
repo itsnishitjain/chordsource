@@ -2,3 +2,4 @@ venv
 instance
 .cache
 __pycache__/
+.env
