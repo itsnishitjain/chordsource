@@ -4,7 +4,9 @@
 	export let songData, votable;
 
 	const handleUpvote = async () => {
-		await fetch(`http://0.0.0.0:8080/vote?url=${songData.song.url.slice(31, 53)}`);
+		await fetch(`http://0.0.0.0:8080/vote?url=${songData.song.url.slice(31, 53)}`, {
+			method: 'POST'
+		});
 	};
 </script>
 

@@ -7,10 +7,8 @@
 
 	export let data;
 
-	let queue = data.res.queue;
-	queue.sort((a, b) => b.score - a.score);
-
-	let nowPlaying = data.res.history.sort((a, b) => b.timestamp - a.timestamp)[0];
+	let queue = data.res.queue.toSorted((a, b) => b.score - a.score);
+	let nowPlaying = data.res.history[data.res.history.length - 1];
 
 	onMount(() => {
 		setInterval(async () => {
@@ -18,16 +16,12 @@
 				method: 'GET'
 			});
 
+			console.log(queue);
+
 			res = await res.json();
-			let resQueue = res.queue;
-			let resHist = await res.history;
-
-			queue = resQueue.sort((a, b) => {
-				b.score - a.score;
-			});
-
-			nowPlaying = resHist.sort((a, b) => b.timestamp - a.timestamp)[0];
-		}, 15000);
+			queue = res.queue.toSorted((a, b) => b.score - a.score);
+			nowPlaying = res.history[res.history.length - 1];
+		}, 5000);
 	});
 </script>
 
